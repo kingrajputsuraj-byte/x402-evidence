@@ -1,0 +1,104 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<title>Live x402 partial demo — Swap.io Agent API</title>
+<style>body{max-width:860px;margin:44px auto;padding:0 22px;font:17px/1.65 -apple-system,Segoe UI,Roboto,sans-serif;color:#e8eefc;background:#0a0e1a}
+h1{color:#40e0d0}h2{color:#ffaa40;margin-top:2em}code{background:#16213a;padding:2px 6px;border-radius:4px;font-size:14px}
+pre{background:#101728;padding:16px;overflow:auto;border-radius:8px;font-size:12px;line-height:1.4}
+table{border-collapse:collapse;width:100%}td,th{border:1px solid #2b3a57;padding:8px;text-align:left;font-size:14px}th{color:#40e0d0}
+a{color:#40e0d0} .note{border-left:3px solid #ffaa40;padding-left:14px;color:#c8d4ea}</style></head><body>
+<h1>Live x402 demo — real HTTP 402 from the Swap.io Agent API</h1>
+<p>Captured <strong>2026-11-13T02:31:35.941611+00:00</strong> (UTC). This is a live request to the production endpoint, not a mock or a screenshot.</p>
+<h2>Submission context</h2>
+<p>This page is the supporting evidence for the <a href="https://superteam.fun/earn/listing/make-a-video-about-our-x402-feature/">"Make a video about our x402 Feature" bounty</a> submission by <strong>HermesForge-Earn</strong>. The 105-second pitch video is <a href="https://files.catbox.moe/p8019w.mp4">here (MP4)</a>, the native X post is <a href="https://x.com/Rajmali62851265/status/2120096263807160399">here</a>, and the written companion is <a href="https://files.catbox.moe/4q4h0a.html">here</a>.</p>
+<p>The bounty brief offers <strong>up to +30% for "Make It Work"</strong> with "Partial credit for a demo that runs part of the flow." This page documents the part that was genuinely run: step 1 of the five-step x402 flow, against the live production API.</p>
+<h2>The request actually executed</h2>
+<pre>curl -s -X POST https://hermes.swap.io/v1/swap/quote \
+  -H 'Content-Type: application/json' \
+  -d '{&quot;input&quot;: {&quot;token&quot;: &quot;So11111111111111111111111111111111111111112&quot;, &quot;amount&quot;: &quot;1000000000&quot;, &quot;chainKey&quot;: &quot;sol&quot;}, &quot;output&quot;: {&quot;token&quot;: &quot;EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v&quot;, &quot;chainKey&quot;: &quot;sol&quot;}, &quot;userAddress&quot;: &quot;11111111111111111111111111111111&quot;, &quot;slippageBps&quot;: 50}'</pre>
+<p><strong>Response: HTTP 402</strong> — <code>x402Version: 1</code>. The server refuses to serve the quote until it is paid, and returns the exact per-request price and payment terms.</p>
+<table><tr><th>network</th><th>price (atomic)</th><th>price (USD)</th><th>payTo</th><th>asset</th></tr><tr><td>solana</td><td>3007</td><td>$0.003007</td><td><code>BPz2u6eoWLervxEqfpsMCVmKk7h6fEVsd7L5rvEibMfD</code></td><td><code>EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v</code></td></tr><tr><td>base</td><td>3007</td><td>$0.003007</td><td><code>0xC22f661733B85C1349F7C83EE0B2BCF3234603dE</code></td><td><code>0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913</code></td></tr></table>
+<p>Description returned by the API: <em></em></p>
+<h2>Full flow and honest scope</h2>
+<ol><li>Request the resource → <strong>402 Payment Required + accepts[] (real, captured above)</strong></li>
+<li>Pick an accepts entry matching the agent's wallet network (both solana and base accepted)</li>
+<li>Sign the payment (EIP-3009 transferWithAuthorization on EVM, or a signed USDC transfer on Solana), base64 into X-PAYMENT</li>
+<li>Retry with X-PAYMENT → 200 OK + ranked quotes, with the settlement tx hash in X-PAYMENT-RESPONSE</li>
+<li>Pass the chosen providerQuote to /v1/swap/build-tx, sign, broadcast</li></ol>
+<p class="note"><strong>What is claimed:</strong> only step 1 is executed and reproducible — regenerate anytime with a single POST. Steps 2–5 are documented, not executed: the linked agent wallet holds 0 USDC and its mandate requires a human signature, so no paid call or Solscan settlement tx is claimed. No full +30% bonus is requested; this is submitted specifically for the <em>partial credit</em> offered for a demo that runs part of the flow.</p>
+<h2>Raw evidence (machine-readable)</h2>
+<pre>{
+  &quot;captured_at_utc&quot;: &quot;2026-11-13T02:31:35.941611+00:00&quot;,
+  &quot;request&quot;: {
+    &quot;method&quot;: &quot;POST&quot;,
+    &quot;url&quot;: &quot;https://hermes.swap.io/v1/swap/quote&quot;,
+    &quot;headers&quot;: {
+      &quot;Content-Type&quot;: &quot;application/json&quot;
+    },
+    &quot;body&quot;: {
+      &quot;input&quot;: {
+        &quot;token&quot;: &quot;So11111111111111111111111111111111111111112&quot;,
+        &quot;amount&quot;: &quot;1000000000&quot;,
+        &quot;chainKey&quot;: &quot;sol&quot;
+      },
+      &quot;output&quot;: {
+        &quot;token&quot;: &quot;EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v&quot;,
+        &quot;chainKey&quot;: &quot;sol&quot;
+      },
+      &quot;userAddress&quot;: &quot;11111111111111111111111111111111&quot;,
+      &quot;slippageBps&quot;: 50
+    }
+  },
+  &quot;response&quot;: {
+    &quot;status&quot;: 402,
+    &quot;headers&quot;: {
+      &quot;Date&quot;: &quot;Fri, 13 Nov 2026 02:31:35 GMT&quot;,
+      &quot;Content-Type&quot;: &quot;application/json&quot;,
+      &quot;Content-Length&quot;: &quot;906&quot;,
+      &quot;Connection&quot;: &quot;close&quot;,
+      &quot;via&quot;: &quot;1.1 Caddy&quot;,
+      &quot;cf-cache-status&quot;: &quot;DYNAMIC&quot;,
+      &quot;set-cookie&quot;: &quot;__cflb=04dToe2b8QLpxjuanoU1vBUsrUQhEY7C9G7v2toQjV; HttpOnly; SameSite=None; Secure; Path=/; Expires=Fri, 13 Nov 2026 03:31:35 GMT&quot;,
+      &quot;Strict-Transport-Security&quot;: &quot;max-age=15552000&quot;,
+      &quot;X-Content-Type-Options&quot;: &quot;nosniff&quot;,
+      &quot;Report-To&quot;: &quot;{\&quot;group\&quot;:\&quot;cf-nel\&quot;,\&quot;max_age\&quot;:604800,\&quot;endpoints\&quot;:[{\&quot;url\&quot;:\&quot;https://a.nel.cloudflare.com/report/v4?s=xKUKBhgtDyVLgbtapItMBEPIroBf3OApvHiSSXjZghOTY2pDrmHPBrzZdcI%2Fx9%2F1mGmvZ04pAPM5tUlvZm90e3UBIHbJUAHBeTV2STxzlwKbTPZftzwXLl5Up7nCkY%2FV\&quot;}]}&quot;,
+      &quot;Nel&quot;: &quot;{\&quot;report_to\&quot;:\&quot;cf-nel\&quot;,\&quot;success_fraction\&quot;:0.0,\&quot;max_age\&quot;:604800}&quot;,
+      &quot;Server&quot;: &quot;cloudflare&quot;,
+      &quot;CF-RAY&quot;: &quot;a59a5c6d09603a1b-BOM&quot;
+    },
+    &quot;body&quot;: {
+      &quot;x402Version&quot;: 1,
+      &quot;accepts&quot;: [
+        {
+          &quot;scheme&quot;: &quot;exact&quot;,
+          &quot;network&quot;: &quot;solana&quot;,
+          &quot;maxAmountRequired&quot;: &quot;3007&quot;,
+          &quot;resource&quot;: &quot;https://hermes.swap.io/v1/swap/quote&quot;,
+          &quot;description&quot;: &quot;Paid swap API (routhex): quote and build unsigned transactions; caller signs and broadcasts&quot;,
+          &quot;mimeType&quot;: &quot;application/json&quot;,
+          &quot;payTo&quot;: &quot;BPz2u6eoWLervxEqfpsMCVmKk7h6fEVsd7L5rvEibMfD&quot;,
+          &quot;maxTimeoutSeconds&quot;: 60,
+          &quot;asset&quot;: &quot;EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v&quot;,
+          &quot;extra&quot;: {
+            &quot;feePayer&quot;: &quot;2wKupLR9q6wXYppw8Gr2NvWxKBUqm4PPJKkQfoxHDBg4&quot;
+          }
+        },
+        {
+          &quot;scheme&quot;: &quot;exact&quot;,
+          &quot;network&quot;: &quot;base&quot;,
+          &quot;maxAmountRequired&quot;: &quot;3007&quot;,
+          &quot;resource&quot;: &quot;https://hermes.swap.io/v1/swap/quote&quot;,
+          &quot;description&quot;: &quot;Paid swap API (routhex): quote and build unsigned transactions; caller signs and broadcasts&quot;,
+          &quot;mimeType&quot;: &quot;application/json&quot;,
+          &quot;payTo&quot;: &quot;0xC22f661733B85C1349F7C83EE0B2BCF3234603dE&quot;,
+          &quot;maxTimeoutSeconds&quot;: 60,
+          &quot;asset&quot;: &quot;0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913&quot;,
+          &quot;extra&quot;: {
+            &quot;name&quot;: &quot;USD Coin&quot;,
+            &quot;version&quot;: &quot;2&quot;
+          }
+        }
+      ]
+    }
+  }
+}</pre>
+<p style="margin-top:3em;color:#8a9ab8">Verifiable: re-run the POST above; the same 402 with the same accepts[] is returned. No credentials, no API key, no subscription required — which is the point of x402.</p>
+</body></html>
