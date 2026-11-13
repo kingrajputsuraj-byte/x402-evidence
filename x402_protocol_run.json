@@ -1,0 +1,162 @@
+{
+  "captured_at_utc": "2026-11-13T06:22:00.073Z",
+  "api": "https://hermes.swap.io/v1/swap/quote",
+  "protocol": "x402 v1 (X-PAYMENT / X-PAYMENT-RESPONSE)",
+  "client": "HermesForge x402_paid_call.mjs (official @solana/web3.js + x402-solana v1 payload spec)",
+  "payer_wallet": "GEMDSpy2bjp9ddXCDkxZwvrEqR8vECVC2Sp4p9zNKFwn",
+  "request": {
+    "method": "POST",
+    "url": "https://hermes.swap.io/v1/swap/quote",
+    "body": {
+      "input": {
+        "token": "So11111111111111111111111111111111111111112",
+        "amount": "1000000000",
+        "chainKey": "sol"
+      },
+      "output": {
+        "token": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+        "chainKey": "sol"
+      },
+      "slippageBps": 50,
+      "userAddress": "GEMDSpy2bjp9ddXCDkxZwvrEqR8vECVC2Sp4p9zNKFwn"
+    }
+  },
+  "steps": [
+    {
+      "step": 1,
+      "label": "unpaid request",
+      "status": 402,
+      "headers": {
+        "cf-cache-status": "DYNAMIC",
+        "cf-ray": "a59badf3ac4ed85a-BOM",
+        "connection": "keep-alive",
+        "content-length": "906",
+        "content-type": "application/json",
+        "date": "Fri, 13 Nov 2026 06:22:00 GMT",
+        "nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+        "report-to": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=g0VYliOTMMPk0h4bTrVjQfQgC8A5HYB3I%2FfMtqPP44c9AxaZ8XktAS1lB3R3fg3pq0IChN9x2EuyFwpX%2Fdd9VW75cbKhiH6SNY1t2wVnrfrvN74y3oREfDdbTs8ysLAO\"}]}",
+        "server": "cloudflare",
+        "set-cookie": "__cflb=04dToe2b8QLpxjuanoU1vBUsrUQhEY7CP4ApqXWzZq; HttpOnly; SameSite=None; Secure; Path=/; Expires=Fri, 13 Nov 2026 07:22:00 GMT",
+        "strict-transport-security": "max-age=15552000",
+        "via": "1.1 Caddy",
+        "x-content-type-options": "nosniff"
+      },
+      "body": {
+        "x402Version": 1,
+        "accepts": [
+          {
+            "scheme": "exact",
+            "network": "solana",
+            "maxAmountRequired": "3007",
+            "resource": "https://hermes.swap.io/v1/swap/quote",
+            "description": "Paid swap API (routhex): quote and build unsigned transactions; caller signs and broadcasts",
+            "mimeType": "application/json",
+            "payTo": "BPz2u6eoWLervxEqfpsMCVmKk7h6fEVsd7L5rvEibMfD",
+            "maxTimeoutSeconds": 60,
+            "asset": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+            "extra": {
+              "feePayer": "2wKupLR9q6wXYppw8Gr2NvWxKBUqm4PPJKkQfoxHDBg4"
+            }
+          },
+          {
+            "scheme": "exact",
+            "network": "base",
+            "maxAmountRequired": "3007",
+            "resource": "https://hermes.swap.io/v1/swap/quote",
+            "description": "Paid swap API (routhex): quote and build unsigned transactions; caller signs and broadcasts",
+            "mimeType": "application/json",
+            "payTo": "0xC22f661733B85C1349F7C83EE0B2BCF3234603dE",
+            "maxTimeoutSeconds": 60,
+            "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+            "extra": {
+              "name": "USD Coin",
+              "version": "2"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "step": 2,
+      "label": "build + sign X-PAYMENT",
+      "ok": true,
+      "x_payment_b64_sha256": "2e3c5a4e8ca48cfdbdb7beff71eca8d8ec40bed674818d0f3eec462467109184",
+      "x_payment_b64_prefix": "eyJ4NDAyVmVyc2lvbiI6MSwic2NoZW1lIjoiZXhhY3QiLCJuZXR3b3JrIjoic29s",
+      "x_payment_b64_full": "eyJ4NDAyVmVyc2lvbiI6MSwic2NoZW1lIjoiZXhhY3QiLCJuZXR3b3JrIjoic29sYW5hIiwicGF5bG9hZCI6eyJ0cmFuc2FjdGlvbiI6IkFnQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBRGFGcFhNTFFZemRoQmpkMENsNVVSek9FckFsSk1UVlJYc25BcmZQQzZmUXBsZFVFUWkwTi9aRHFIQkliM0gyNSs5RlpDbTFCdDgxRG9NeDlKUXFzc01nQUlCQXdjY3htN1VOMUVSV2tLMWtGRXl4UFpvTW9ZUjVlamV0OWhpV0YwcU5WSFFBZUpLdGdyNXVnMHBEMVZvZWNHNjlUZjRiNnc2bmdLRDBqR0ljTi8zKytLaEEycHozQU1CVHdORk5nUjFuWmwrOFMwRlNyTUc1TXJvSDdmWklXSlFmSmRxUHZSTGkwRGU5QzVoR0NITWdMa2ZIYjI4Qy82NWNPV2VNd3lQL3ZaL2tnTUdSbS9sSVJjeS8reXR1bkxEbStlOGpPVzd4ZmNTYXl4RG16cEFBQUFBQnQzMjRkZGxvWlBaeStGR3p1dDVyQnkwaGUxZld6ZVJPb3oxaFg3L0FLbkcrbnJ6dnR1dE9qMWw4MnFyeVhReHNidmt3dEwyNE9SOHBnSURSUzlkWWV4RWxlQ2txQjhJa3hvOFVMMDVBQmEvdjJyT1JySWxxK3pEVVFXZk1WaXlBd1FBQlFKWUd3QUFCQUFKQXdFQUFBQUFBQUFBQlFRQ0JnTUJDZ3kvQ3dBQUFBQUFBQVlBIn19",
+      "payment_meta": {
+        "network": "solana",
+        "scheme": "exact",
+        "maxAmountRequired": "3007",
+        "payTo": "BPz2u6eoWLervxEqfpsMCVmKk7h6fEVsd7L5rvEibMfD",
+        "asset": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+        "feePayer": "2wKupLR9q6wXYppw8Gr2NvWxKBUqm4PPJKkQfoxHDBg4",
+        "payer": "GEMDSpy2bjp9ddXCDkxZwvrEqR8vECVC2Sp4p9zNKFwn",
+        "sourceAta": "ELNUfDuZw9CZ5Rd52QysC63Er1H23H7tvqZNARritUN",
+        "destAta": "89jtoCobZ3Ako2bUmdcRRDkMGYifySVF89zkRv6PRjKP",
+        "recentBlockhash": "GuHsh8kgoCnjfr8Dzi27VjWq1zveDuQPyD2oL3M6Wdrq",
+        "decodedPayloadBytes": 654,
+        "signedByPayer": true,
+        "signaturesPresent": 1
+      }
+    },
+    {
+      "step": 3,
+      "label": "paid retry (X-PAYMENT)",
+      "status": 402,
+      "headers": {
+        "cf-cache-status": "DYNAMIC",
+        "cf-ray": "a59badf8c989d85a-BOM",
+        "connection": "keep-alive",
+        "content-length": "946",
+        "content-type": "application/json",
+        "date": "Fri, 13 Nov 2026 06:22:01 GMT",
+        "nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+        "report-to": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=O7P2VQrheXu%2BahahfM9wEXk3a03OesaASSsfkC2EgeQqGb22Hyj2y%2FkTr6zqof5GHlto9OxzrYQfjFDuPVKY%2B%2FmE%2F%2FM2qr58NpIQvrM%2BK%2F8M4DrOH5GuJoxa8VoGDq53\"}]}",
+        "server": "cloudflare",
+        "set-cookie": "__cflb=04dToe2b8QLpxjuanoU1vBUsrUQhEY7CYkqqeM1bqM; HttpOnly; SameSite=None; Secure; Path=/; Expires=Fri, 13 Nov 2026 07:22:01 GMT",
+        "strict-transport-security": "max-age=15552000",
+        "via": "1.1 Caddy",
+        "x-content-type-options": "nosniff"
+      },
+      "body": {
+        "x402Version": 1,
+        "error": "transaction_simulation_failed",
+        "accepts": [
+          {
+            "scheme": "exact",
+            "network": "solana",
+            "maxAmountRequired": "3007",
+            "resource": "https://hermes.swap.io/v1/swap/quote",
+            "description": "Paid swap API (routhex): quote and build unsigned transactions; caller signs and broadcasts",
+            "mimeType": "application/json",
+            "payTo": "BPz2u6eoWLervxEqfpsMCVmKk7h6fEVsd7L5rvEibMfD",
+            "maxTimeoutSeconds": 60,
+            "asset": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+            "extra": {
+              "feePayer": "2wKupLR9q6wXYppw8Gr2NvWxKBUqm4PPJKkQfoxHDBg4"
+            }
+          },
+          {
+            "scheme": "exact",
+            "network": "base",
+            "maxAmountRequired": "3007",
+            "resource": "https://hermes.swap.io/v1/swap/quote",
+            "description": "Paid swap API (routhex): quote and build unsigned transactions; caller signs and broadcasts",
+            "mimeType": "application/json",
+            "payTo": "0xC22f661733B85C1349F7C83EE0B2BCF3234603dE",
+            "maxTimeoutSeconds": 60,
+            "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+            "extra": {
+              "name": "USD Coin",
+              "version": "2"
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "settlement_receipt": null,
+  "outcome": "NOT_SETTLED",
+  "reason": "facilitator rejected payment (payer wallet has no USDC / no ATA)",
+  "finished_at_utc": "2026-11-13T06:22:01.559Z"
+}
