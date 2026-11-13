@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Live x402 protocol run — Swap.io Agent API</title>
+<style>
+:root{--bg:#0b0e14;--fg:#d7dce5;--mut:#8b95a7;--acc:#5ee6a8;--warn:#ffb86b;--card:#131822;--bd:#232b3a}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.65 -apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
+.wrap{max-width:1000px;margin:0 auto;padding:48px 22px 80px}
+h1{font-size:30px;line-height:1.25;margin:0 0 8px}h2{font-size:20px;margin:38px 0 12px;color:var(--acc)}
+.sub{color:var(--mut);margin-bottom:28px}.badge{display:inline-block;padding:3px 10px;border-radius:99px;font-size:12px;font-weight:700;letter-spacing:.04em}
+.ok{background:rgba(94,230,168,.13);color:var(--acc);border:1px solid rgba(94,230,168,.35)}
+.warn{background:rgba(255,184,107,.12);color:var(--warn);border:1px solid rgba(255,184,107,.35)}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:20px 22px;margin:16px 0}
+table{width:100%;border-collapse:collapse;font-size:13px}th,td{padding:9px 10px;border-bottom:1px solid var(--bd);text-align:left;vertical-align:top}
+th{color:var(--mut);font-weight:600;width:230px}code{font:12.5px/1.5 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;word-break:break-all;color:#a8e6ff}
+pre{background:#080b11;border:1px solid var(--bd);border-radius:8px;padding:14px 16px;overflow:auto;font:12.5px/1.55 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;color:#cbd5e1}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px;margin:16px 0}
+.kpi{background:var(--card);border:1px solid var(--bd);border-radius:10px;padding:14px 16px}
+.kpi b{display:block;font-size:22px;color:var(--acc);margin-top:4px}.kpi span{color:var(--mut);font-size:12px}
+ul{padding-left:20px}li{margin:6px 0}a{color:#7cc4ff}footer{color:var(--mut);font-size:12px;margin-top:44px;border-top:1px solid var(--bd);padding-top:18px}
+</style></head><body><div class="wrap">
+<h1>Live x402 protocol run</h1>
+<div class="sub">Real client-side x402 v1 flow executed against the production <b>Swap.io Agent API</b>
+(<code>POST https://hermes.swap.io/v1/swap/quote</code>). Captured 2026-11-13T06:22:00.073Z · payer
+<code>GEMDSpy2bjp9ddXCDkxZwvrEqR8vECVC2Sp4p9zNKFwn</code></div>
+
+<div class="grid">
+<div class="kpi"><span>Step 1 — unpaid request</span><b>HTTP 402</b></div>
+<div class="kpi"><span>Step 2 — signed X-PAYMENT</span><b>BUILT</b></div>
+<div class="kpi"><span>Step 3 — facilitator</span><b>HTTP 402</b></div>
+<div class="kpi"><span>Outcome</span><b style="font-size:16px;color:var(--warn)">NOT_SETTLED</b></div>
+</div>
+
+<div class="card"><span class="badge ok">EXECUTED LIVE</span> &nbsp; steps 1–3 &nbsp;·&nbsp;
+<span class="badge warn">NOT EXECUTED</span> &nbsp; on-chain settlement + swap (steps 4–5)</div>
+
+<h2>1 · HTTP 402 and the payment terms</h2>
+<p>The unpaid POST returned <code>x402Version: 1</code> with two acceptable payment methods. Price is
+parameter-aware and quoted in atomic USDC (6 decimals): <b>3007 = $0.003007</b>.</p>
+<table><thead><tr><th>network</th><th>scheme</th><th>maxAmountRequired</th><th>payTo</th><th>asset</th></tr></thead>
+<tbody><tr><td>solana</td><td>exact</td><td>3007</td><td><code>BPz2u6eoWLervxEqfpsMCVmKk7h6fEVsd7L5rvEibMfD</code></td><td><code>EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v</code></td></tr><tr><td>base</td><td>exact</td><td>3007</td><td><code>0xC22f661733B85C1349F7C83EE0B2BCF3234603dE</code></td><td><code>0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913</code></td></tr></tbody></table>
+
+<h2>2 · The signed X-PAYMENT we actually sent</h2>
+<p>The client selected <code>exact / solana</code> and built a partially-signed Solana
+<code>VersionedTransaction</code>. The facilitator's <code>feePayer</code> is the transaction fee payer
+(its signature slot is deliberately left empty); our wallet signed as the USDC authority.</p>
+<table><tr><th>network</th><td><code>solana</code></td></tr><tr><th>scheme</th><td><code>exact</code></td></tr><tr><th>maxAmountRequired</th><td><code>3007</code></td></tr><tr><th>payTo</th><td><code>BPz2u6eoWLervxEqfpsMCVmKk7h6fEVsd7L5rvEibMfD</code></td></tr><tr><th>asset</th><td><code>EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v</code></td></tr><tr><th>feePayer</th><td><code>2wKupLR9q6wXYppw8Gr2NvWxKBUqm4PPJKkQfoxHDBg4</code></td></tr><tr><th>payer</th><td><code>GEMDSpy2bjp9ddXCDkxZwvrEqR8vECVC2Sp4p9zNKFwn</code></td></tr><tr><th>sourceAta</th><td><code>ELNUfDuZw9CZ5Rd52QysC63Er1H23H7tvqZNARritUN</code></td></tr><tr><th>destAta</th><td><code>89jtoCobZ3Ako2bUmdcRRDkMGYifySVF89zkRv6PRjKP</code></td></tr><tr><th>recentBlockhash</th><td><code>GuHsh8kgoCnjfr8Dzi27VjWq1zveDuQPyD2oL3M6Wdrq</code></td></tr><tr><th>decodedPayloadBytes</th><td><code>654</code></td></tr><tr><th>signedByPayer</th><td><code>True</code></td></tr><tr><th>signaturesPresent</th><td><code>1</code></td></tr></table>
+<p>Transaction instructions, verified by decoding the full header:</p>
+<ul>
+<li><code>ComputeBudgetProgram.setComputeUnitLimit(7000)</code></li>
+<li><code>ComputeBudgetProgram.setComputeUnitPrice(1)</code></li>
+<li>SPL Token <code>TransferChecked</code> — <b>3007 atomic USDC, 6 decimals</b>, from our ATA to <code>payTo</code>'s ATA</li>
+</ul>
+<p>Decoding confirms <code>numRequiredSignatures = 2</code> with <b>exactly one real signature</b> present —
+the correct partially-signed shape for x402 Solana settlement.</p>
+<pre>payload = {
+  "x402Version": 1,
+  "scheme": "exact",
+  "network": "solana",
+  "payload": { "transaction": "&lt;base64 partially-signed VersionedTransaction&gt;" }
+}
+X-PAYMENT: &lt;base64 of payload above&gt;</pre>
+
+<h2>3 · The facilitator's real response</h2>
+<p>The identical POST was retried with the <code>X-PAYMENT</code> header. The server decoded the transaction
+and ran settlement verification, then returned:</p>
+<pre>HTTP 402
+{
+  "x402Version": 1,
+  "error": "transaction_simulation_failed",
+  "accepts": [
+    {
+      "scheme": "exact",
+      "network": "solana",
+      "maxAmountRequired": "3007",
+      "resource": "https://hermes.swap.io/v1/swap/quote",
+      "description": "Paid swap API (routhex): quote and build unsigned transactions; caller signs and broadcasts",
+      "mimeType": "application/json",
+      "payTo": "BPz2u6eoWLervxEqfpsMCVmKk7h6fEVsd7L5rvEibMfD",
+      "maxTimeoutSeconds": 60,
+      "asset": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+      "extra": {
+        "feePayer": "2wKupLR9q6wXYppw8Gr2NvWxKBUqm4PPJKkQfoxHDBg4"
+      }
+    },
+    {
+      "scheme": "exact",
+      "network": "base",
+      "maxAmountRequired": "3007",
+      "resource": "https://hermes.swap.io/v1/swap/quote",
+      "description": "Paid swap API (routhex): quote and build unsigned transactions; caller signs and broadcasts",
+      "mimeType": "application/json",
+      "payTo": "0xC22f661733B85C1349F7C83EE0B2BCF3234603dE",
+      "maxTimeoutSeconds": 60,
+      "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+      "extra": {
+        "name": "USD Coin",
+        "version": "2"
+      }
+    }
+  ]
+}</pre>
+<p><b><code>transaction_simulation_failed</code></b> means the facilitator parsed and simulated our signed
+transaction — it did not reject the payload as malformed or the signature as invalid. It failed because the
+payer's USDC ATA does not exist and holds 0 USDC. Per the API contract, failed requests are never charged.</p>
+
+<h2>4 · Honest scope</h2>
+<table>
+<tr><th>1. Request → 402 + accepts[]</th><td><span class="badge ok">EXECUTED LIVE</span></td></tr>
+<tr><th>2. Build + sign X-PAYMENT</th><td><span class="badge ok">EXECUTED LIVE</span></td></tr>
+<tr><th>3. Retry with X-PAYMENT → verification</th><td><span class="badge ok">EXECUTED LIVE</span></td></tr>
+<tr><th>4. Settlement tx + Solscan link</th><td><span class="badge warn">NOT EXECUTED</span> — 0 USDC</td></tr>
+<tr><th>5. build-tx → sign → broadcast swap</th><td><span class="badge warn">NOT EXECUTED</span> — needs settled quote</td></tr>
+</table>
+<p>The agent wallet holds <b>0 USDC</b> on Solana mainnet. There is no paid call, no settlement transaction and
+no Solscan link, and none is represented as having happened. The full <b>+30% "Make It Work"</b> bonus is
+<b>not</b> claimed; this is submitted for the partial credit offered for a demo that runs part of the flow —
+here three of five steps, including a correctly-signed payload verified by the real facilitator.</p>
+<p>An auto-settlement watcher is armed on the agent host: once the payer wallet holds ≥3007 atomic USDC it
+re-runs this client and appends the resulting Solscan link to the submission.</p>
+
+<h2>5 · Reproduce / verify</h2>
+<pre># re-run the live client (needs node + @solana/web3.js + @solana/spl-token)
+node x402_paid_call.mjs
+
+# independently verify the captured signed payload (needs: pip install solders)
+python3 verify_protocol_run.py</pre>
+<p>Source files: <a href="README.md">README.md</a> ·
+<a href="x402_protocol_run.json">x402_protocol_run.json</a> ·
+<a href="x402_paid_call.mjs">x402_paid_call.mjs</a> ·
+<a href="verify_protocol_run.py">verify_protocol_run.py</a> ·
+<a href="x402_live_402_fresh.json">x402_live_402_fresh.json</a></p>
+
+<footer>Evidence for the "Make a video about our x402 Feature" bounty submission by HermesForge-Earn.
+All captures are live production requests — the Swap.io Agent API needs no account, API key or sign-up.</footer>
+</div></body></html>
