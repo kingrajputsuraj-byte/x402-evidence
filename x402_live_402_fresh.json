@@ -1,0 +1,75 @@
+{
+  "captured_at_utc": "2026-11-13T02:31:35.941611+00:00",
+  "request": {
+    "method": "POST",
+    "url": "https://hermes.swap.io/v1/swap/quote",
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "input": {
+        "token": "So11111111111111111111111111111111111111112",
+        "amount": "1000000000",
+        "chainKey": "sol"
+      },
+      "output": {
+        "token": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+        "chainKey": "sol"
+      },
+      "userAddress": "11111111111111111111111111111111",
+      "slippageBps": 50
+    }
+  },
+  "response": {
+    "status": 402,
+    "headers": {
+      "Date": "Fri, 13 Nov 2026 02:31:35 GMT",
+      "Content-Type": "application/json",
+      "Content-Length": "906",
+      "Connection": "close",
+      "via": "1.1 Caddy",
+      "cf-cache-status": "DYNAMIC",
+      "set-cookie": "__cflb=04dToe2b8QLpxjuanoU1vBUsrUQhEY7C9G7v2toQjV; HttpOnly; SameSite=None; Secure; Path=/; Expires=Fri, 13 Nov 2026 03:31:35 GMT",
+      "Strict-Transport-Security": "max-age=15552000",
+      "X-Content-Type-Options": "nosniff",
+      "Report-To": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=xKUKBhgtDyVLgbtapItMBEPIroBf3OApvHiSSXjZghOTY2pDrmHPBrzZdcI%2Fx9%2F1mGmvZ04pAPM5tUlvZm90e3UBIHbJUAHBeTV2STxzlwKbTPZftzwXLl5Up7nCkY%2FV\"}]}",
+      "Nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+      "Server": "cloudflare",
+      "CF-RAY": "a59a5c6d09603a1b-BOM"
+    },
+    "body": {
+      "x402Version": 1,
+      "accepts": [
+        {
+          "scheme": "exact",
+          "network": "solana",
+          "maxAmountRequired": "3007",
+          "resource": "https://hermes.swap.io/v1/swap/quote",
+          "description": "Paid swap API (routhex): quote and build unsigned transactions; caller signs and broadcasts",
+          "mimeType": "application/json",
+          "payTo": "BPz2u6eoWLervxEqfpsMCVmKk7h6fEVsd7L5rvEibMfD",
+          "maxTimeoutSeconds": 60,
+          "asset": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+          "extra": {
+            "feePayer": "2wKupLR9q6wXYppw8Gr2NvWxKBUqm4PPJKkQfoxHDBg4"
+          }
+        },
+        {
+          "scheme": "exact",
+          "network": "base",
+          "maxAmountRequired": "3007",
+          "resource": "https://hermes.swap.io/v1/swap/quote",
+          "description": "Paid swap API (routhex): quote and build unsigned transactions; caller signs and broadcasts",
+          "mimeType": "application/json",
+          "payTo": "0xC22f661733B85C1349F7C83EE0B2BCF3234603dE",
+          "maxTimeoutSeconds": 60,
+          "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "extra": {
+            "name": "USD Coin",
+            "version": "2"
+          }
+        }
+      ]
+    }
+  }
+}
